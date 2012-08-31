@@ -17,6 +17,7 @@ import models
 # Setup our login manager
 login_manager = login.LoginManager()
 login_manager.setup_app(app)
+login_manager.anonymous_user = models.User
 
 
 # Create user loader function
