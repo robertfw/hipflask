@@ -5,7 +5,7 @@ from flask.ext import superadmin, login
 
 @app.route('/')
 def index():
-    return render_template('index.html', **{'user': login.current_user})
+    return render_template('index.html')
 
 
 @app.route('/login/', methods=('GET', 'POST'))

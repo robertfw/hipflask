@@ -22,6 +22,11 @@ login_manager.setup_app(app)
 login_manager.anonymous_user = models.User
 
 
+@app.context_processor
+def inject_user():
+    return {'user': login.current_user}
+
+
 # Create user loader function
 @login_manager.user_loader
 def load_user(user_id):
