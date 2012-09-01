@@ -7,12 +7,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../test.sqlite'
 app.secret_key = 'abc123'
 db = sqlalchemy.SQLAlchemy(app)
 
-# Setup the Admin
-admin = superadmin.Admin(app)
-
-# Now that we have our admin, app, and db we can register our view routes and admin models
+#Now we need to bring in our views
 import views
 import models
+
+# Setup the Admin
+admin = superadmin.Admin(app, index_view=views.ProtectedAdminIndexView())
+import admin as admin_config
+
 
 # Setup our login manager
 login_manager = login.LoginManager()
@@ -24,9 +26,3 @@ login_manager.anonymous_user = models.User
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.query(models.User).get(user_id)
-
-
-# Create customized index view class
-class ProtectedIndexView(superadmin.AdminIndexView):
-    def is_accessible(self):
-        return login.current_user.is_authenticated()

@@ -9,11 +9,8 @@ class LoginForm(wtf.Form):
     def validate_login(self, field):
         user = self.get_user()
 
-        if user is None:
-            raise wtf.ValidationError('Invalid user')
-
-        if user.password != self.password.data:
-            raise wtf.ValidationError('Invalid password')
+        if user is None or user.password != self.password.data:
+            raise wtf.ValidationError('Invalid username or password')
 
     def get_user(self):
         return db.session.query(models.User).filter_by(login=self.login.data).first()

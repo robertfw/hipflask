@@ -1,27 +1,19 @@
 from hipflask import db
-from utils import register_with_admin
+from sqlalchemy import Sequence
 
 
-@register_with_admin
 class User(db.Model):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
+    id = db.Column(db.Integer, Sequence('user_id_seq'), primary_key=True)
+    login = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(255))
     is_admin = db.Column(db.Boolean(), default=False)
     is_active = db.Column(db.Boolean(), default=True)
 
-    def __init__(self, username=None, password=None, email=None, is_admin=None, is_active=None):
-        self.username = username
-        self.password = password
-        self.email = email
-        self.is_admin = is_admin
-        self.is_active = is_active
-
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.login
 
     # Flask-Login integration
     def is_authenticated(self):

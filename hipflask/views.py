@@ -1,11 +1,11 @@
 from hipflask import app, db, forms, models
 from flask import request, redirect, url_for, render_template
-from flask.ext import login
+from flask.ext import superadmin, login
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', **{'user': login.current_user})
 
 
 @app.route('/login/', methods=('GET', 'POST'))
@@ -40,3 +40,13 @@ def register_view():
 def logout_view():
     login.logout_user()
     return redirect(url_for('index'))
+
+
+class ProtectedModelView(superadmin.model.ModelAdmin):
+    def is_accessible(self):
+        return login.current_user.is_authenticated() and login.current_user.is_admin
+
+
+class ProtectedAdminIndexView(superadmin.AdminIndexView):
+    def is_accessible(self):
+        return login.current_user.is_authenticated() and login.current_user.is_admin
