@@ -3,6 +3,17 @@
     <title>{% block title %}whats in your flask?{% endblock %}</title>
     <link rel="shortcut icon" href="/static/favicon.ico" />
 <body>
+	<div>
+	    {% if user and user.is_authenticated() %}
+	        Hello {{ user.login }}! <a href="{{ url_for('logout_view') }}">Logout</a>
+	        {% if user.is_admin %}
+	        	<a href="{{ url_for('admin.index') }}">Go to admin!</a>
+	        {% endif %}
+	    {% else %}
+	        Welcome anonymous user!
+	        <a href="{{ url_for('login_view') }}">Login</a>&nbsp;<a href="{{ url_for('register_view') }}">Register</a>
+	    {% endif %}
+	</div>
 {% block body %}
 {% endblock %}
 </body>
