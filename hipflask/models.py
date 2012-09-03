@@ -1,16 +1,18 @@
-from hipflask import db
-from sqlalchemy import Sequence
+from sqlalchemy import Column, Boolean, Integer, String, Sequence
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
 
 
-class User(db.Model):
+class User(Base):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, Sequence('user_id_seq'), primary_key=True)
-    login = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(255))
-    is_admin = db.Column(db.Boolean(), default=False)
-    is_active = db.Column(db.Boolean(), default=True)
+    id = Column(Integer, Sequence('user_id_seq'), primary_key=True)
+    login = Column(String(80), unique=True)
+    email = Column(String(120), unique=True)
+    password = Column(String(255))
+    is_admin = Column(Boolean(), default=False)
+    is_active = Column(Boolean(), default=True)
 
     def __repr__(self):
         return '<User %r>' % self.login
