@@ -6,7 +6,6 @@ import sqlite3
 from migrate.versioning import api as migrate_api
 import os
 import shutil
-import config
 
 Base = declarative_base()
 
@@ -72,7 +71,7 @@ class HipFlask(object):
         self.login_manager.user_loader(self.load_user)
 
         # Setup blueprint
-        self.blueprint = Blueprint('hipflask', __name__)
+        self.blueprint = Blueprint('hipflask', __name__, template_folder='templates', static_folder='static')
         self.blueprint.add_url_rule('/login', endpoint='login', methods=('GET', 'POST'), view_func=self.login_view)
         self.blueprint.add_url_rule('/register', endpoint='register', methods=('GET', 'POST'), view_func=self.register_view)
         self.blueprint.add_url_rule('/logout', endpoint='logout', view_func=self.logout_view)
@@ -156,7 +155,7 @@ class HipFlask(object):
 
             sqlite3.connect(self.config.DB_FILE)
             migrate_api.version_control(self.config.DB_URL, self.config.REPOSITORY)
-            self.migrate_up()
+            migrate_api.upgrade(self.config.DB_URL, self.config.REPOSITORY)
 
         @manager.command
         def make_migration(description):
@@ -170,12 +169,11 @@ class HipFlask(object):
 
         @manager.command
         def version():
-            print migrate_api.version(self.config.REPOSITORY)
+            repo_v = migrate_api.version(self.config.REPOSITORY)
+            db_v = migrate_api.db_version(self.config.DB_URL, self.config.REPOSITORY)
+
+            print 'db: {db_v}, repo: {repo_v}'.format(db_v=db_v, repo_v=repo_v)
 
         @manager.command
         def migrate():
-            self.migrate_up()
-
-        @manager.command
-        def migrate_up():
             migrate_api.upgrade(self.config.DB_URL, self.config.REPOSITORY)
