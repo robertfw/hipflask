@@ -5,13 +5,13 @@
 <body>
 	<div>
 	    {% if current_user and current_user.is_authenticated() %}
-	        Hello {{ current_user.login }}! <a href="{{ url_for('logout_view') }}">Logout</a>
+	        Hello {{ current_user.login }}! <a href="{{ url_for('logout') }}">Logout</a>
 	        {% if current_user.is_admin %}
 	        	<a href="{{ url_for('admin.index') }}">Go to admin!</a>
 	        {% endif %}
 	    {% else %}
 	        Welcome anonymous user!
-	        <a href="{{ url_for('login_view') }}">Login</a>&nbsp;<a href="{{ url_for('register_view') }}">Register</a>
+	        <a href="{{ url_for('login') }}">Login</a>&nbsp;<a href="{{ url_for('register') }}">Register</a>
 	    {% endif %}
 	</div>
 {% block body %}
