@@ -85,6 +85,7 @@ class HipFlask(object):
 
     def login_view(self):
         form = self.LoginForm(request.form)
+        form.db = self.db  # TODO: ugly, fix
         if form.validate_on_submit():
             user = form.get_user()
             login.login_user(user)
@@ -94,6 +95,7 @@ class HipFlask(object):
 
     def register_view(self):
         form = self.RegistrationForm(request.form)
+        form.db = self.db  # TODO: ugly, fix
         if form.validate_on_submit():
             user = User()
 
