@@ -4,9 +4,9 @@
     <link rel="shortcut icon" href="/static/favicon.ico" />
 <body>
 	<div>
-	    {% if user and user.is_authenticated() %}
-	        Hello {{ user.login }}! <a href="{{ url_for('logout_view') }}">Logout</a>
-	        {% if user.is_admin %}
+	    {% if current_user and current_user.is_authenticated() %}
+	        Hello {{ current_user.login }}! <a href="{{ url_for('logout_view') }}">Logout</a>
+	        {% if current_user.is_admin %}
 	        	<a href="{{ url_for('admin.index') }}">Go to admin!</a>
 	        {% endif %}
 	    {% else %}

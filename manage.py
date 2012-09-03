@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from flask.ext.script import Manager
-from hipflask import app
+from sampleapp import app
 import sqlite3
 from migrate.versioning import api as migrate_api
 import os
