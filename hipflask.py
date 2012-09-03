@@ -2,6 +2,11 @@ from flask.ext import sqlalchemy, login, superadmin, wtf
 from flask import Blueprint, render_template, redirect, url_for, request
 from sqlalchemy import Column, Boolean, Integer, String, Sequence
 from sqlalchemy.ext.declarative import declarative_base
+import sqlite3
+from migrate.versioning import api as migrate_api
+import os
+import shutil
+import config
 
 Base = declarative_base()
 
@@ -48,11 +53,13 @@ class HipFlask(object):
         Contains boilerplate / curated setup for your typical app
     """
 
-    def __init__(self, app=None, secret_key=None, db_url=None):
-        app.secret_key = secret_key
+    def __init__(self, app=None, config=None):
+        self.config = config
+
+        app.secret_key = config.SECRET_KEY
         
         # Setup sqlalchemy
-        app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+        app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_URL
         self.db = sqlalchemy.SQLAlchemy()
 
         # Setup superadmin
@@ -135,3 +142,39 @@ class HipFlask(object):
         def validate_login(self, field):
             if self.db.session.query(User).filter_by(login=self.login_name.data).count() > 0:
                 raise wtf.ValidationError('Duplicate username')
+
+    def register_manager_commands(self, manager):
+        manager.command(self.makedb)
+        manager.command(self.make_migration)
+        manager.command(self.test_migration)
+        manager.command(self.migrate)
+        manager.command(self.version)
+
+    def makedb(self, force=False):
+        '''Create a new database from scratch, put it under version control, and run all migrations'''
+        if os.path.exists(self.config.DB_FILE):
+            if force:
+                os.remove(self.config.DB_FILE)
+            else:
+                raise Exception('Database already exists! Use -f to force file deletion')
+
+        sqlite3.connect(self.config.DB_FILE)
+        migrate_api.version_control(self.config.DB_URL, self.config.REPOSITORY)
+        self.migrate_up()
+
+    def make_migration(self, description):
+        migrate_api.script(description, self.config.REPOSITORY)
+
+    def test_migration(self):
+        shutil.copy2(self.config.DB_FILE, self.config.TEST_DB_FILE)
+        migrate_api.test(self.config.TEST_DB_URL, self.config.REPOSITORY)
+        os.remove(self.config.TEST_DB_FILE)
+
+    def version(self):
+        migrate_api.version(self.config.REPOSITORY)
+
+    def migrate(self):
+        self.migrate_up()
+
+    def migrate_up(self):
+        migrate_api.upgrade(self.config.DB_URL, self.config.REPOSITORY)
