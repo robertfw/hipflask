@@ -1,10 +1,11 @@
 from flask import Flask
 from flask.ext import sqlalchemy, superadmin, login
+import config
 
 #Setup our app and database
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../local_dev.db'
-app.secret_key = 'abc123'
+app.secret_key = config.SECRET_KEY
 db = sqlalchemy.SQLAlchemy(app)
 
 #Now we need to bring in our views
