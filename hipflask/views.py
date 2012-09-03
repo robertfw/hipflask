@@ -26,6 +26,7 @@ def register_view():
         user = models.User()
 
         form.populate_obj(user)
+        user.is_active = 1
 
         db.session.add(user)
         db.session.commit()

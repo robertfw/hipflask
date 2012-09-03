@@ -3,7 +3,7 @@ from flask.ext import sqlalchemy, superadmin, login
 
 #Setup our app and database
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../test.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../local_dev.db'
 app.secret_key = 'abc123'
 db = sqlalchemy.SQLAlchemy(app)
 

@@ -1,5 +1,5 @@
 from hipflask import db
-from sqlalchemy import Sequence, relationship
+from sqlalchemy import Sequence
 
 
 class User(db.Model):
@@ -27,12 +27,3 @@ class User(db.Model):
 
     def get_id(self):
         return self.id
-
-
-class Idea(db.Model):
-    __tablename__ = 'ideas'
-
-    id = db.Column(db.Integer, Sequence('idea_id_seq'), primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = relationship(User, primaryjoin=user_id == User.id)
-    description = db.Column(db.UnicodeText)
