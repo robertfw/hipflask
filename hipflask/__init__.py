@@ -1,17 +1,16 @@
 from flask import Flask
 from flask.ext import sqlalchemy, superadmin, login
 import config
+import models
 
 #Setup our app and database
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_URL
-print config.DB_URL
 app.secret_key = config.SECRET_KEY
 db = sqlalchemy.SQLAlchemy(app)
 
 #Now we need to bring in our views
 import views
-import models
 
 # Setup the Admin
 admin = superadmin.Admin(app, index_view=views.ProtectedAdminIndexView())
