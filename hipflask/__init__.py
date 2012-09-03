@@ -4,7 +4,8 @@ import config
 
 #Setup our app and database
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../local_dev.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_URL
+print config.DB_URL
 app.secret_key = config.SECRET_KEY
 db = sqlalchemy.SQLAlchemy(app)
 
