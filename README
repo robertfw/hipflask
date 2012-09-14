@@ -1,1 +1,0 @@
-To make a sqlite dev database, use ./manage.py makedb

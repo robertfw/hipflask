@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from flask.ext.script import Manager
-from sampleapp import app, hipflask
+from sample_app import app, hipflask
 
 manager = Manager(app)
 hipflask.register_manager_commands(manager)
