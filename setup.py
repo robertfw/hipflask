@@ -19,7 +19,6 @@ setup(
     description='Quickstart tool for setting up common flask extensions',
     long_description=__doc__,
     packages=['hipflask'],
-    namespace_packages=['hipflask'],
     zip_safe=False,
     platforms='any',
     install_requires=[
