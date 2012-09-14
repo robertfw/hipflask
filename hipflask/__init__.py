@@ -1,6 +1,10 @@
 from flask.ext import sqlalchemy, login, superadmin
 from flask import Blueprint
-import sqlite3
+try:
+    import sqlite3
+except ImportError:
+    pass
+
 from migrate.versioning import api as migrate_api
 import os
 import shutil

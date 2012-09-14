@@ -11,7 +11,7 @@ from setuptools import setup
 
 setup(
     name='hipflask',
-    version='0.2.1',
+    version='0.2.2',
     url='http://github.com/robertfw/hipflask',
     license='MIT',
     author='Robert Warner',
