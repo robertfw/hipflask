@@ -1,13 +1,6 @@
 from flask.ext import sqlalchemy, login, superadmin
 from flask import Blueprint
-try:
-    import sqlite3
-except ImportError:
-    pass
-
 from migrate.versioning import api as migrate_api
-import os
-import shutil
 import views
 from models import User
 
@@ -36,7 +29,7 @@ class HipFlask(object):
         self.login_manager.user_loader(self.load_user)
 
         # Setup blueprint
-        self.blueprint = Blueprint('hipflask', __name__, template_folder='templates', static_folder='static')
+        self.blueprint = Blueprint('hipflask', __name__, template_folder='templates', static_folder='hipflask_static')
         self.blueprint.hipflask = self  # ugly? not sure, get community feedback
 
         self.blueprint.add_url_rule('/login', endpoint='login', methods=('GET', 'POST'), view_func=views.login_view)
@@ -57,17 +50,12 @@ class HipFlask(object):
         return self.db.session.query(User).get(user_id)
 
     def register_manager_commands(self, manager):
-        #TODO: ugly, refactor this method
-        @manager.command
-        def makedb(force=False):
-            '''Create a new database from scratch, put it under version control, and run all migrations'''
-            if os.path.exists(self.config.DB_FILE):
-                if force:
-                    os.remove(self.config.DB_FILE)
-                else:
-                    raise Exception('Database already exists! Use -f to force file deletion')
+        #TODO: ugly, find some better way to attach these commands
 
-            sqlite3.connect(self.config.DB_FILE)
+        @manager.command
+        def initdb():
+            '''Put a database under version control, and run all migrations'''
+
             migrate_api.version_control(self.config.DB_URL, self.config.REPOSITORY)
             migrate_api.upgrade(self.config.DB_URL, self.config.REPOSITORY)
 
@@ -77,9 +65,7 @@ class HipFlask(object):
 
         @manager.command
         def test_migration():
-            shutil.copy2(self.config.DB_PATH, self.config.TEST_DB_PATH)
             migrate_api.test(self.config.TEST_DB_URL, self.config.REPOSITORY)
-            os.remove(self.config.TEST_DB_PATH)
 
         @manager.command
         def version():
