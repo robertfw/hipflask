@@ -17,7 +17,7 @@ from setuptools import setup
 
 setup(
     name='hipflask',
-    version='0.3.1',
+    version='0.3.2',
     url='http://github.com/robertfw/hipflask',
     license='License :: OSI Approved :: MIT License',
     author='Robert Warner',
