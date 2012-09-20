@@ -6,12 +6,12 @@ from forms import LoginForm, RegistrationForm
 
 class ProtectedModelView(superadmin.model.ModelAdmin):
     def is_accessible(self):
-        return login.current_user.is_authenticated() and login.current_user.is_admin
+        return login.current_user.is_authenticated() and login.current_user.is_active and login.current_user.is_admin
 
 
 class ProtectedAdminIndexView(superadmin.AdminIndexView):
     def is_accessible(self):
-        return login.current_user.is_authenticated() and login.current_user.is_admin
+        return login.current_user.is_authenticated() and login.current_user.is_active and login.current_user.is_admin
 
 
 def login_view():
@@ -43,6 +43,6 @@ def register_view():
     return render_template('form.html', form=form)
 
 
-def logout_view(self):
+def logout_view():
     login.logout_user()
     return redirect(url_for('index'))

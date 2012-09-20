@@ -5,42 +5,63 @@
     <link href='/static/favicon.ico' rel='icon' type='image/x-icon' />
     <link href='{{ url_for('hipflask.static', filename='css/bootstrap.css') }}' rel='stylesheet'>
     <link href='{{ url_for('hipflask.static', filename='css/spider.css') }}' rel='stylesheet'>
-    <link href='{{ url_for('hipflask.static', filename='css/bootstrap-responsive.css') }}' rel='stylesheet'>
-    
-    <script type='text/javascript' src='{{ url_for('hipflask.static', filename='js/thirdparty/jquery-1.8.1.js') }}'></script> 
-
-    <script type='text/javascript' src='{{ url_for('hipflask.static', filename='js/thirdparty/knockout-2.1.0.debug.js') }}'></script>
-    <script type='text/javascript' src='{{ url_for('hipflask.static', filename='js/jquery-knockout.js') }}'></script>
-    <script type='text/javascript' src='{{ url_for('hipflask.static', filename='js/thirdparty/knockout.mapping-latest.debug.js') }}'></script>
-
-    <script type='text/javascript' src='{{ url_for('hipflask.static', filename='js/thirdparty/bootstrap.js') }}'></script>
-
+    <link href='{{ url_for('hipflask.static', filename='css/bootstrap-responsive.css') }}' rel='stylesheet'>    
     {% block head %}{% endblock %}
 </head>
-<body>
+<body>    
     <div class="container">
+        <div class="modal hide fade" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">Login / Register</h3>
+            </div>
+            <div class="modal-body">
+                <p>form goes here</p>
+            </div>
+            <div class="modal-footer">                
+            </div>
+        </div>
+
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
                 <ul class="nav">
-                    <li><a class="brand" href="#">{% block brand %}get hip!{% endblock %}</a></a>
+                    <li>    
+                        <a class="brand" href="#">
+                            {% block brand %}get hip!{% endblock %}
+                        </a>
+                    </li>
                 </ul>
                 <ul class="nav pull-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Robert
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Profile</a></li>
-                            <li><a href="#">Logout</a></li>
-                        </ul>
-                    </li>
+                    {% block usermenu %}                    
+                        {% if current_user.is_authenticated() %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                {{ current_user.login }}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Profile</a></li>
+                                <li><a href="{{ url_for('hipflask.logout') }}">Logout</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li>
+                            <button data-target="#login_modal" class='btn-primary' data-toggle="modal">Login / Register</button>
+                        </li>
+                        {% endif %}                    
+                    {% endblock usermenu %}
                 </ul>
             </div>
         </div>
         <div>    
             {% block body %}{% endblock %}
         </div>
-    </div>
+    </div>    
+
+    <script type='text/javascript' src='{{ url_for('hipflask.static', filename='js/thirdparty/jquery-1.8.1.js') }}'></script> 
+    <script type='text/javascript' src='{{ url_for('hipflask.static', filename='js/thirdparty/knockout-2.1.0.debug.js') }}'></script>
+    <script type='text/javascript' src='{{ url_for('hipflask.static', filename='js/jquery-knockout.js') }}'></script>
+    <script type='text/javascript' src='{{ url_for('hipflask.static', filename='js/thirdparty/knockout.mapping-latest.debug.js') }}'></script>
+    <script type='text/javascript' src='{{ url_for('hipflask.static', filename='js/thirdparty/bootstrap.js') }}'></script>
 </body>
 </html>
