@@ -1,20 +1,19 @@
-{% extends "base.html" %}
-{% block body %}
-<form method="POST" action="">
-    {{ form.hidden_tag() }}
-    {% for f in form if f.label.text != 'Csrf Token' %}
-    <div>
-    {{ f.label }}
-    {{ f }}
-    {% if f.errors %}
-    <ul>
-        {% for e in f.errors %}
-        <li>{{ e }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    </div>
+{% macro form(wtf, action='', method="POST", submit_class="btn", submit_text="Submit") %}
+<form method="{{method}}" action="{{action}}">
+    {{ wtf.hidden_tag() }}
+    {% for f in wtf if f.label.text != 'Csrf Token' %}
+        <div>
+            {{ f.label }}
+            {{ f }}
+            {% if f.errors %}
+                <ul>
+                    {% for e in f.errors %}
+                    <li>{{ e }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
     {% endfor %}
-    <input type="submit" />
+    <button class="{{submit_class}}" type="submit" />{{submit_text}}</button>
 </form>
-{% endblock %}
+{% endmacro %}

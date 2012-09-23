@@ -1,3 +1,4 @@
+{% from 'form.html' import form as form %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +17,7 @@
                 <h3 id="myModalLabel">Login / Register</h3>
             </div>
             <div class="modal-body">
-                <p>form goes here</p>
+                {{ form(login_form) }}
             </div>
             <div class="modal-footer">                
             </div>
