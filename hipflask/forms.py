@@ -9,28 +9,27 @@ def gethip():
     return current_app.blueprints['hipflask'].hipflask
 
 
-class LoginForm(wtf.Form):
-    login_name = wtf.TextField(validators=[wtf.required()])
-    password = wtf.PasswordField(validators=[wtf.required()])
-
-    def validate_login(self, field):
+def unique(column):
+    def _unique(form, field):
         hipflask = gethip()
-        user = hipflask.get_user()
+        kwargs = {column: field.data}
+        num_instances = hipflask.db.session.query(User).filter_by(**kwargs).count()
+        if num_instances > 0:
+            raise wtf.ValidationError('Duplicate {column}'.format(column=column))
 
-        if user is None or user.password != self.password.data:
-            raise wtf.ValidationError('Invalid username or password')
+    return _unique
+
+
+class LoginForm(wtf.Form):
+    login = wtf.TextField(validators=[wtf.Required()])
+    password = wtf.PasswordField(validators=[wtf.Required()])
 
     def get_user(self):
         hipflask = gethip()
-        return hipflask.db.session.query(User).filter_by(login=self.login_name.data).first()
+        return hipflask.db.session.query(User).filter_by(login=self.login.data).first()
 
 
 class RegistrationForm(wtf.Form):
-    login_name = wtf.TextField(validators=[wtf.required()])
-    email = wtf.TextField()
-    password = wtf.PasswordField(validators=[wtf.required()])
-
-    def validate_login(self, field):
-        hipflask = gethip()
-        if hipflask.db.session.query(User).filter_by(login=self.login_name.data).count() > 0:
-            raise wtf.ValidationError('Duplicate username')
+    login = wtf.TextField(validators=[wtf.InputRequired(), unique('login')])
+    email = wtf.TextField(validators=[wtf.InputRequired(), wtf.Email(), unique('email')])
+    password = wtf.PasswordField(validators=[wtf.InputRequired()])

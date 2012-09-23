@@ -12,7 +12,7 @@ class User(Base):
     email = Column(String(120), unique=True)
     password = Column(String(255))
     is_admin = Column(Boolean(), default=False)
-    is_active = Column(Boolean(), default=True)
+    is_suspended = Column(Boolean(), default=False)
 
     def __repr__(self):
         return '<User %r>' % self.login
@@ -22,7 +22,7 @@ class User(Base):
         return self.id is not None
 
     def is_active(self):
-        return self.is_active
+        return not self.is_suspended
 
     def is_anonymous(self):
         return self.is_authenticated()
