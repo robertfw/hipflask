@@ -2,3 +2,7 @@ body {
     /* See http://twitter.github.com/bootstrap/components.html#navbar */
     padding: 60px
 }
+
+.alert {
+    display: none;
+}

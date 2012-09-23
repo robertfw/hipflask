@@ -54,6 +54,7 @@ def register_view():
 
 
 def logout_view():
+    user = login.current_user
+    flash('See you later, {name}!'.format(name=user.login), 'success')
     login.logout_user()
-    flash('You have been logged out', 'success')
     return redirect(url_for('index'))
