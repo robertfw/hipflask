@@ -32,34 +32,31 @@
         </div>
 
         <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <ul class="nav">
-                    <li>    
-                        <a class="brand" href="#">
-                            {% block brand %}get hip!{% endblock %}
-                        </a>
-                    </li>
-                </ul>
-                <ul class="nav pull-right">
+            <div class="navbar-inner">                
+                <a class="brand" href="#">
+                    {% block brand %}get hip!{% endblock %}
+                </a>                                
                     {% block usermenu %}                    
                         {% if current_user.is_authenticated() %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                {{ current_user.login }}
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Profile</a></li>
-                                <li><a href="{{ url_for('hipflask.logout') }}">Logout</a></li>
-                            </ul>
-                        </li>
+                        <ul class="nav pull-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="icon-user icon-white"></i>
+                                    {{ current_user.login }}
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url_for('hipflask.logout') }}">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
                         {% else %}
-                        <li>
-                            <button data-target="#login_modal" class='btn-primary' data-toggle="modal">Login / Register</button>
-                        </li>
+                            <button data-target="#login_modal" class='pull-right btn-large btn-success' data-toggle="modal">    <i class="icon-user icon-white"></i>
+                                Login / Register
+                            </button>
                         {% endif %}                    
                     {% endblock usermenu %}
-                </ul>
+                
             </div>
         </div>
         {% with messages = get_flashed_messages(with_categories=true) %}

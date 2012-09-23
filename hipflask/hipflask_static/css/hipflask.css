@@ -6,3 +6,26 @@ body {
 .alert {
     display: none;
 }
+
+.navbar {
+    height:50px;
+}
+
+.navbar .brand {
+    margin-top: 5px;
+    margin-left: 0px;
+}
+
+.navbar button {
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+#login_modal {
+    overflow: hidden;
+}
+
+#login_modal .container {
+    width: 575px;
+}
