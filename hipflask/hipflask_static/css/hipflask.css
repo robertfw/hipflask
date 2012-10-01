@@ -13,7 +13,7 @@ body {
 
 .navbar .brand {
     margin-top: 5px;
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .navbar button {
@@ -22,10 +22,10 @@ body {
     margin-bottom: 5px;
 }
 
-#login_modal {
+.modal {
     overflow: hidden;
 }
 
-#login_modal .container {
+.modal .container {
     width: 575px;
 }
